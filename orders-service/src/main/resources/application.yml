@@ -1,0 +1,31 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: orders-service
+  datasource:
+    url: jdbc:postgresql://postgres-orders:5432/orders_db
+    username: orders
+    password: orders_secret
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: orders-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+app:
+  kafka:
+    topics:
+      payment-request: order.payment.requested
+      payment-completed: order.payment.completed
+      payment-failed: order.payment.failed

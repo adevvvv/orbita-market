@@ -1,0 +1,33 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: payments-service
+  datasource:
+    url: jdbc:postgresql://postgres-payments:5432/payments_db
+    username: payments
+    password: payments_secret
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: payments-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.orbitamarket.payments.messaging.dto"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+app:
+  kafka:
+    topics:
+      payment-request: order.payment.requested
+      payment-completed: order.payment.completed
+      payment-failed: order.payment.failed

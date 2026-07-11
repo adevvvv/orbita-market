@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS accounts (
+    id UUID PRIMARY KEY,
+    user_id VARCHAR(50) NOT NULL UNIQUE,
+    balance INTEGER NOT NULL DEFAULT 0,
+    version BIGINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS payment_inbox (
+    id UUID PRIMARY KEY,
+    order_id UUID NOT NULL,
+    event_id UUID NOT NULL UNIQUE,
+    user_id VARCHAR(50) NOT NULL,
+    amount INTEGER NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    processed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_accounts_user_id ON accounts(user_id);
+CREATE INDEX idx_payment_inbox_order_id ON payment_inbox(order_id);
